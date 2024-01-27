@@ -13,9 +13,8 @@
 
 
 #define NAME_LEN 30
-#define ID_LEN 5 // Assuming a student ID of 4 characters
+#define ID_LEN 5
 
-// Structure to hold information of course grades for a student
 struct courseGrade {
     char course_name[15];
     char grade[3];  // Increased the size to accommodate grades like 'A+'
@@ -46,20 +45,17 @@ double grade_to_gpa(const char *grade);
 
 int main() {
     struct student *student_list = NULL;
+    student_list = restore(student_list);
     char code;
 
-    printf("Operation List: \n (l) restore database, (a) add student, (u) add course and grade, (p) print students, (i) print student info, (r) remove student, (s) save and exit.\n");
+    printf("Operation List: \n(a) add student, (u) add course and grade, (p) print students, (i) print student info, (r) remove student, (s) save and exit.\n");
 
     for (;;) {
         printf("Enter operation code: ");
         scanf(" %c", &code);
-        while (getchar() != '\n');
+        while (getchar() != '\n'); 
 
-        // Options for user to run the system
         switch (code) {
-            case 'l':
-                student_list = restore(student_list);
-                break;
             case 'a':
                 student_list = add_student(student_list);
                 break;
@@ -86,7 +82,6 @@ int main() {
     }
 }
 
-// Restores all student information from a file on the computer
 struct student *restore(struct student *list) {
     FILE *file = fopen("studentdb.txt", "r");
 
@@ -183,7 +178,6 @@ struct student *add_student(struct student *list) {
     return list;
 }
 
-// Allowing admin to add course grade information to the student
 struct student *add_course_grade(struct student *list) {
     char id[ID_LEN];
 
@@ -226,7 +220,6 @@ struct student *add_course_grade(struct student *list) {
     return list;
 }
 
-// Removing a student from db for example if they are no longer attending
 struct student *remove_student(struct student *list) {
     char id[ID_LEN];
 
@@ -264,7 +257,6 @@ struct student *remove_student(struct student *list) {
     return list;
 }
 
-// Print a list of all students in the db
 void print_students(struct student *list) {
     if (list != NULL) {
         struct student *curr = list;
@@ -278,7 +270,6 @@ void print_students(struct student *list) {
     }
 }
 
-// Choose a specific students information to print including GPA and course information
 void print_student_info(struct student *list) {
     if (list == NULL) {
         printf("Student database is empty.\n");
@@ -309,7 +300,6 @@ void print_student_info(struct student *list) {
     }
 }
 
-// Function to calculate a students GPA
 void calculateGpa(struct student *list, const char *sID) {
     if (list == NULL) {
         printf("Student database is empty.\n");
@@ -342,13 +332,11 @@ void calculateGpa(struct student *list, const char *sID) {
     }
 }
 
-// Function to save the information we have gathered in the period of adding student information
 void save_and_exit(struct student *list) {
     printf("Saved information to database.\n");
 
-    // Appending a file if it exists otherwise creating the file to hold the student information in a file that can be restored on startup
     const char *filename_o = "studentdb.txt";
-    FILE *file = fopen(filename_o, "a");
+    FILE *file = fopen(filename_o, "w");
 
     if (file == NULL) {
         perror("Error opening file");
@@ -374,7 +362,6 @@ void save_and_exit(struct student *list) {
     fclose(file);
 }
 
-// Function to return the equivalent value based on the course leter grade 
 double grade_to_gpa(const char *grade) {
     switch (toupper(grade[0])) {
         case 'A':
@@ -410,3 +397,4 @@ int read_line(char str[], int n) {
 
     return i;
 }
+
